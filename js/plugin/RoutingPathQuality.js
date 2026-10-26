@@ -396,7 +396,7 @@ var HotLineQualityProvider = L.Class.extend({
                 Array.prototype.push.apply(flatLines, vals);
             }
 
-            if (flatLines.length > 0) {
+            if (flatLines.length > 0 && this._fillMissingValues(flatLines)) {
                 var hotlineOptions = L.extend({}, this.hotlineOptions);
                 if (!hotlineOptions.min && !hotlineOptions.max) {
                     hotlineOptions.pct = hotlineOptions.pct ? hotlineOptions.pct : 1.0;
@@ -431,6 +431,35 @@ var HotLineQualityProvider = L.Class.extend({
             latLngVals.push(this._convertToArray(segmentLatLngs[i], val));
         }
         return latLngVals;
+    },
+
+    /**
+     * Replaces values that are not a number, e.g. from points without elevation, with the
+     * nearest previous value (following value at the start), as hotline cannot draw them (#860).
+     *
+     * @returns {boolean} false when there is no valid value at all
+     */
+    _fillMissingValues(latLngVals) {
+        var lastValid = null;
+        var firstValidIndex = -1;
+        for (var i = 0; i < latLngVals.length; i++) {
+            var val = latLngVals[i][2];
+            if (typeof val === 'number' && isFinite(val)) {
+                lastValid = val;
+                if (firstValidIndex === -1) {
+                    firstValidIndex = i;
+                }
+            } else if (lastValid !== null) {
+                latLngVals[i][2] = lastValid;
+            }
+        }
+        if (firstValidIndex === -1) {
+            return false;
+        }
+        for (var i = 0; i < firstValidIndex; i++) {
+            latLngVals[i][2] = latLngVals[firstValidIndex][2];
+        }
+        return true;
     },
 
     _convertToArray(latLng, val) {
