@@ -35,6 +35,7 @@
             deleteRouteButton,
             pois,
             circlego,
+            routeLayers,
             urlHash;
         // By default bootstrap-select use glyphicons
         $('.selectpicker').selectpicker({
@@ -362,6 +363,7 @@
             }
             trackMessages.update(track, segments, segmentsLayer);
             trackAnalysis.update(track, segments);
+            routeLayers.update(track, segments);
 
             exportRoute.update(latLngs, segments);
         }
@@ -369,6 +371,15 @@
         routing.addTo(map);
 
         elevation.addBelow(map);
+
+        routeLayers = new BR.RouteLayers(map, {
+            routing,
+            elevation,
+            onActiveRouteChanged() {
+                onUpdate();
+                urlHash.onMapMove();
+            },
+        });
 
         sidebar = BR.sidebar({
             defaultTabId: BR.conf.transit ? 'tab_itinerary' : 'tab_profile',

@@ -1230,6 +1230,20 @@
                             </svg>
                         </a>
                     </li>
+                    <li>
+                        <a
+                            href="#tab_route_layers"
+                            role="tab"
+                            data-i18n="[title]sidebar.tab-tooltip"
+                            data-i18n-options='{
+                                "action": "$t(sidebar.route-layers.tooltip)",
+                                "toggleKey": "T",
+                                "switchKey": "$t(keyboard.shift)+T"
+                            }'
+                            title="Route layers"
+                            ><i class="fa fa-clone"></i
+                        ></a>
+                    </li>
                     <li hidden>
                         <a
                             href="#tab_itinerary"
@@ -1365,6 +1379,95 @@
                             </div>
                         </div>
 
+                        <div class="leaflet-sidebar-pane" id="tab_route_layers">
+                            <h1 class="leaflet-sidebar-header">
+                                <span class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></span
+                                ><span class="d-none d-md-block leaflet-sidebar-expand"
+                                    ><i class="fa fa-expand"></i></span
+                                ><span data-i18n="sidebar.route-layers.title">Route layers</span>
+                            </h1>
+                            <input
+                                type="file"
+                                id="route-layers-file"
+                                multiple
+                                accept=".gpx,.kml,.json,.geojson"
+                                hidden
+                            />
+                            <div id="route-layers-toolbar" class="btn-toolbar">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-action="import"
+                                    data-i18n="[title]sidebar.route-layers.import-tooltip"
+                                    title="Import GPX, KML or GeoJSON files as layers (or drop files here)"
+                                >
+                                    <i class="fa fa-upload"></i>
+                                    <span data-i18n="sidebar.route-layers.import">Import</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-action="new"
+                                    data-i18n="[title]sidebar.route-layers.new-tooltip"
+                                    title="Keep the current route as layer and start a new route"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                    <span data-i18n="sidebar.route-layers.new">New route</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-action="duplicate"
+                                    data-i18n="[title]sidebar.route-layers.duplicate-tooltip"
+                                    title="Add a copy of the current route as layer"
+                                >
+                                    <i class="fa fa-files-o"></i>
+                                    <span data-i18n="sidebar.route-layers.duplicate">Duplicate</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-action="save-selection"
+                                    data-i18n="[title]sidebar.route-layers.save-selection-tooltip"
+                                    title="Drag over the elevation profile to select a part, then save it as new layer"
+                                >
+                                    <i class="fa fa-scissors"></i>
+                                    <span data-i18n="sidebar.route-layers.save-selection">Selection to layer</span>
+                                </button>
+                            </div>
+                            <div id="route-layers-active"></div>
+                            <div class="route-layers-list-header">
+                                <span data-i18n="sidebar.route-layers.layers">Layers</span>
+                                <span class="route-layers-bulk">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-link"
+                                        data-action="show-all"
+                                        data-i18n="[title]sidebar.route-layers.show-all"
+                                        title="Show all"
+                                    >
+                                        <i class="fa fa-eye"></i></button
+                                    ><button
+                                        type="button"
+                                        class="btn btn-sm btn-link"
+                                        data-action="hide-all"
+                                        data-i18n="[title]sidebar.route-layers.hide-all"
+                                        title="Hide all"
+                                    >
+                                        <i class="fa fa-eye-slash"></i></button
+                                    ><button
+                                        type="button"
+                                        class="btn btn-sm btn-link"
+                                        data-action="delete-all"
+                                        data-i18n="[title]sidebar.route-layers.delete-all"
+                                        title="Delete all"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <ul id="route-layers-list"></ul>
+                        </div>
                         <div class="leaflet-sidebar-pane" id="tab_profile">
                             <h1 class="leaflet-sidebar-header">
                                 <span class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></span

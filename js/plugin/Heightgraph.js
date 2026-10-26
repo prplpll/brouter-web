@@ -232,6 +232,37 @@ BR.Heightgraph = function (map, layersControl, routing, pois) {
                 });
         },
 
+        // remember the section selected by dragging over the chart, e.g. to save it as route layer
+        _dragEndHandler() {
+            const items = this._areasFlattended;
+            if (this._dragStartCoords && this._gotDragged && items && items.length) {
+                const clamp = (idx) => Math.max(0, Math.min(items.length - 1, idx));
+                const idx1 = clamp(this._findItemForX(this._dragStartCoords[0]));
+                const idx2 = clamp(this._findItemForX(this._dragCurrentCoords[0]));
+                if (idx1 !== idx2) {
+                    const start = items[Math.min(idx1, idx2)].latlng;
+                    const end = items[Math.max(idx1, idx2)].latlng;
+                    this._setSelection({ start: [start.lat, start.lng], end: [end.lat, end.lng] });
+                }
+            }
+            L.Control.Heightgraph.prototype._dragEndHandler.call(this);
+        },
+
+        _resetDrag(skipMapFitBounds) {
+            L.Control.Heightgraph.prototype._resetDrag.call(this, skipMapFitBounds);
+            if (!this._dragRectangleG) {
+                this._setSelection(null);
+            }
+        },
+
+        _setSelection(selection) {
+            if (this._selection === selection) return;
+            this._selection = selection;
+            if (this._map) {
+                this._map.fire('heightgraph:selection', { selection });
+            }
+        },
+
         _keydownListener(e) {
             if (BR.Util.keyboardShortcutsAllowed(e) && e.keyCode === this.options.shortcut.toggle) {
                 $('#elevation-btn').click();
